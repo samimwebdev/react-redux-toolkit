@@ -10,11 +10,19 @@
 //reducer
 //action creator
 //action
-
-//action
-
+import { lazy, Suspense, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { increment, decrement, reset } from './store/actionCreator'
+import {
+  increment,
+  decrement,
+  incrementByValue,
+  reset,
+} from './features/counter/counterSlice'
+import { getAllTodos } from './features/todo/todoSlice'
+//plain redux
+// import { increment, decrement, reset } from './store/actionCreator'
+
+//Redux toolkit
 
 // store.subscribe(() => console.log(store.getState()))
 
@@ -27,12 +35,19 @@ import { increment, decrement, reset } from './store/actionCreator'
 
 function App() {
   const count = useSelector((state) => state.count)
+  const todos = useSelector((state) => state.todo)
   const dispatch = useDispatch()
-  console.log(count)
+  useEffect(() => {
+    dispatch(getAllTodos())
+  }, [])
+
   return (
     <>
       <p> {count.value}</p>
       <button onClick={() => dispatch(increment())}>Increment</button>
+      <button onClick={() => dispatch(incrementByValue(10))}>
+        IncrementByValue
+      </button>
       <button onClick={() => dispatch(decrement())}>Decrement</button>
       <button onClick={() => dispatch(reset())}>Reset</button>
     </>
